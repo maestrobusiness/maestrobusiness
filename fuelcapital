@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAESTRO - FUEL CAPITAL ANALISYS</title>
+  <style>
+    :root{
+      --bg: #062a1f;              /* verde escuro (fundo) */
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --line: rgba(255,255,255,.14);
+
+      --yellow: #f2c94c;          /* amarelo */
+      --gold: #d4af37;            /* dourado */
+      --gold2: #b38f2a;
+
+      --good: #55efc4;
+      --bad: #ff7675;
+      --warn: #ffeaa7;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(212,175,55,.10), transparent 60%),
+                  radial-gradient(900px 700px at 90% 30%, rgba(242,201,76,.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(6,42,31,.95), rgba(6,42,31,.82));
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0 6px;
+    }
+
+    .title{
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 14px;
+      color: rgba(255,255,255,.95);
+    }
+
+    .subtitle{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .badge{
+      padding: 8px 10px;
+      border: 1px solid rgba(212,175,55,.35);
+      background: linear-gradient(180deg, rgba(212,175,55,.10), rgba(242,201,76,.06));
+      border-radius: 999px;
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      padding: 10px 0 14px;
+    }
+
+    .leftControls, .rightControls{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .segmented{
+      display:flex;
+      gap: 6px;
+      padding: 6px;
+      background: rgba(0,0,0,.12);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .segmented button{
+      border: 0;
+      cursor: pointer;
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: rgba(255,255,255,.88);
+      background: transparent;
+      font-weight: 700;
+      letter-spacing: .03em;
+      font-size: 12px;
+      transition: transform .04s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
+    }
+    .segmented button:hover{ background: rgba(255,255,255,.06); }
+    .segmented button:active{ transform: translateY(1px); }
+    .segmented button.active{
+      background: linear-gradient(180deg, rgba(212,175,55,.26), rgba(242,201,76,.12));
+      box-shadow: inset 0 0 0 1px rgba(212,175,55,.30);
+      color: rgba(255,255,255,.95);
+    }
+
+    select, input{
+      background: rgba(0,0,0,.12);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 10px;
+      outline: none;
+      font-size: 13px;
+    }
+    input::placeholder{ color: rgba(255,255,255,.55); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      padding: 14px 0 18px;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.045));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    }
+
+    .cardHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      margin-bottom: 12px;
+    }
+
+    .cardHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.93);
+    }
+
+    .hint{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 640px){
+      .kpis{ grid-template-columns: 1fr; }
+    }
+
+    .kpi{
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .kpi .label{
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      margin-bottom: 6px;
+    }
+    .kpi .value{
+      font-size: 22px;
+      font-weight: 850;
+      letter-spacing: .02em;
+    }
+    .kpi .delta{
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .pill{
+      font-weight: 800;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .pill.good{ border-color: rgba(85,239,196,.35); background: rgba(85,239,196,.08); color: rgba(85,239,196,.95); }
+    .pill.bad{  border-color: rgba(255,118,117,.35); background: rgba(255,118,117,.08); color: rgba(255,118,117,.95); }
+    .pill.warn{ border-color: rgba(255,234,167,.35); background: rgba(255,234,167,.08); color: rgba(255,234,167,.95); }
+
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    th, td{
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      vertical-align: middle;
+    }
+    th{
+      text-align:left;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+      background: rgba(0,0,0,.12);
+    }
+    tr:hover td{ background: rgba(255,255,255,.03); }
+    .right{ text-align:right; }
+    .muted{ color: var(--muted); }
+    .small{ font-size: 12px; }
+
+    .spark{
+      width: 120px;
+      height: 28px;
+      display:block;
+    }
+
+    .footerNote{
+      margin-top: 10px;
+      color: rgba(255,255,255,.62);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .goldLine{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,.55), transparent);
+      margin: 10px 0 0;
+    }
+
+    .btn{
+      cursor:pointer;
+      border: 1px solid rgba(212,175,55,.28);
+      background: linear-gradient(180deg, rgba(212,175,55,.18), rgba(242,201,76,.08));
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      font-size: 12px;
+      transition: transform .04s ease, filter .15s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn:hover{ filter: brightness(1.06); }
+
+    .chipRow{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 10px; }
+    .chip{
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.12);
+      color: rgba(255,255,255,.86);
+      font-size: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip.active{
+      border-color: rgba(212,175,55,.35);
+      background: rgba(212,175,55,.12);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div>
+          <div class="title">MAESTRO - FUEL CAPITAL ANALISYS</div>
+          <div class="subtitle">Painel de indicadores para combustíveis (Brasil) e variáveis que impactam o setor</div>
+        </div>
+        <div class="badge" id="asOf">As of: —</div>
+      </div>
+
+      <div class="controls">
+        <div class="leftControls">
+          <div class="segmented" aria-label="Filtro de período">
+            <button class="active" data-period="D">Diário</button>
+            <button data-period="W">Semanal</button>
+            <button data-period="M">Mensal</button>
+            <button data-period="Y">Anual</button>
+          </div>
+
+          <select id="category">
+            <option value="ALL">Todas as categorias</option>
+            <option value="FUEL">Combustíveis</option>
+            <option value="MACRO">Macro</option>
+            <option value="FX">Câmbio</option>
+            <option value="COMMOD">Commodities</option>
+            <option value="LOG">Logística/Distribuição</option>
+          </select>
+
+          <input id="search" type="text" placeholder="Buscar indicador (ex.: diesel, IPCA, brent, USD/BRL)" />
+        </div>
+
+        <div class="rightControls">
+          <button class="btn" id="randomize">Simular atualização</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <section class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Resumo executivo</h2>
+            <p class="hint" id="summaryText">—</p>
+          </div>
+          <div class="small muted" id="periodLabel">Período: Diário</div>
+        </div>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="goldLine"></div>
+
+        <div class="chipRow" id="quickFilters">
+          <div class="chip active" data-preset="CORE">Core Fuel</div>
+          <div class="chip" data-preset="PRICES">Preços bomba</div>
+          <div class="chip" data-preset="RISK">Risco Brasil</div>
+          <div class="chip" data-preset="INPUTS">Insumos</div>
+          <div class="chip" data-preset="ALL">Tudo</div>
+        </div>
+
+        <p class="footerNote">
+          Observação: esta versão é um template pronto para plugar dados reais (API/planilha). Os números abaixo são placeholders
+          para validar UI, filtros e visualização.
+        </p>
+      </section>
+
+      <aside class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Drivers do setor</h2>
+            <p class="hint">O que tende a mover margem, demanda e pricing power.</p>
+          </div>
+        </div>
+        <ul class="small" style="margin:0; padding-left: 16px; color: rgba(255,255,255,.82); line-height: 1.55;">
+          <li><span style="color: var(--gold); font-weight: 800;">Paridade e referência</span>: Brent/WTI, crack spreads, câmbio.</li>
+          <li><span style="color: var(--gold); font-weight: 800;">Regulação</span>: tributos (ICMS/federais), mistura (biodiesel/etanol).</li>
+          <li><span style="color: var(--gold); font-weight: 800;">Custo e oferta</span>: frete, capacidade de refino, importação.</li>
+          <li><span style="color: var(--gold); font-weight: 800;">Demanda</span>: atividade econômica, PIB, inflação, crédito.</li>
+          <li><span style="color: var(--gold); font-weight: 800;">Risco Brasil</span>: juros reais, prêmio de risco, volatilidade.</li>
+        </ul>
+        <div class="goldLine"></div>
+        <p class="footerNote">
+          Próximo passo prático: conectar fontes (ANP, IBGE, BCB SGS, cotações internacionais) e definir regras de “alerta” por thresholds.
+        </p>
+      </aside>
+    </div>
+
+    <section class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>Indicadores</h2>
+          <p class="hint">Ordene por variação e isole o horizonte (D/W/M/Y). Sparklines representam tendência recente.</p>
+        </div>
+        <div class="small muted" id="countLabel">—</div>
+      </div>
+
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:220px;">Indicador</th>
+              <th style="min-width:140px;">Categoria</th>
+              <th class="right" style="min-width:120px;">Valor</th>
+              <th class="right" style="min-width:120px;">Variação</th>
+              <th class="right" style="min-width:140px;">Tendência</th>
+              <th style="min-width:220px;">Nota</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ==========================
+    // 1) DADOS (placeholders)
+    // ==========================
+    const INDICATORS = [
+      // Combustíveis (exemplos)
+      mk("Diesel S10 (bomba) - R$/L", "FUEL", 6.15, "Margem e repasse", trend(18, 6.0, 6.4)),
+      mk("Gasolina (bomba) - R$/L", "FUEL", 5.75, "Demanda e elasticidade", trend(18, 5.5, 5.95)),
+      mk("Etanol hidratado (bomba) - R$/L", "FUEL", 3.85, "Competição com gasolina", trend(18, 3.7, 4.05)),
+      mk("Preço de realização Petrobras (ref.)", "FUEL", 100.0, "Proxy interno (índice)", trend(18, 96, 103)),
+
+      // Macro
+      mk("IPCA (12m) - %", "MACRO", 4.5, "Pressão inflacionária/repasse", trend(18, 3.9, 4.9), true),
+      mk("Selic - %", "MACRO", 11.25, "Custo de capital e demanda", trend(18, 10.8, 12.1), true),
+      mk("PIB (YoY) - %", "MACRO", 2.2, "Atividade e consumo", trend(18, 1.4, 2.8), true),
+
+      // Câmbio
+      mk("USD/BRL", "FX", 5.05, "Importação e paridade", trend(18, 4.8, 5.25)),
+      mk("DXY (índice)", "FX", 103.0, "Pressão global sobre USD", trend(18, 100, 105)),
+
+      // Commodities
+      mk("Brent (USD/bbl)", "COMMOD", 82.0, "Referência global", trend(18, 76, 88)),
+      mk("WTI (USD/bbl)", "COMMOD", 78.0, "Benchmark alternativo", trend(18, 72, 85)),
+      mk("Soja (USD/bu) - proxy biodiesel", "COMMOD", 12.3, "Custo de mistura", trend(18, 11.2, 13.4)),
+
+      // Logística/Distribuição
+      mk("Frete rodoviário (índice)", "LOG", 102.0, "Custo de distribuição", trend(18, 98, 106), true),
+      mk("Volume vendas (índice)", "LOG", 101.5, "Demanda agregada", trend(18, 99, 104), true),
+    ];
+
+    // períodos: D/W/M/Y (variação percentual simulada por horizonte)
+    const PERIODS = {
+      D: { label: "Diário",  mult: 1.0  },
+      W: { label: "Semanal", mult: 1.8  },
+      M: { label: "Mensal",  mult: 3.2  },
+      Y: { label: "Anual",   mult: 7.5  },
+    };
+
+    // quick presets (filtro rápido)
+    const PRESETS = {
+      CORE:  (x) => ["Diesel", "Gasolina", "USD/BRL", "Brent", "Selic"].some(k => x.name.includes(k)),
+      PRICES:(x) => ["bomba"].some(k => x.name.toLowerCase().includes(k)),
+      RISK:  (x) => ["Selic", "IPCA", "USD/BRL", "DXY"].some(k => x.name.includes(k)),
+      INPUTS:(x) => ["Brent", "WTI", "Soja", "Frete"].some(k => x.name.includes(k)),
+      ALL:   (_) => true
+    };
+
+    function mk(name, category, value, note, series, invertColor=false){
+      return {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2),
+        name, category, value, note,
+        series,
+        invertColor,        // se "subir" pode ser ruim (ex.: inflação, juros) — usado em sinal
+        changes: { D: 0, W: 0, M: 0, Y: 0 } // preenchido na simulação
+      };
+    }
+
+    function trend(n, min, max){
+      const arr = [];
+      let v = min + Math.random()*(max-min);
+      for(let i=0;i<n;i++){
+        v += (Math.random()-0.5) * (max-min) * 0.10;
+        v = Math.max(min, Math.min(max, v));
+        arr.push(v);
+      }
+      return arr;
+    }
+
+    function fmt(val){
+      // formatação simples: se parece % em label, o usuário pode ajustar; aqui é genérico.
+      return Number(val).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+    }
+
+    function nowStamp(){
+      const d = new Date();
+      return d.toLocaleString("pt-BR");
+    }
+
+    // ==========================
+    // 2) ESTADO / FILTROS
+    // ==========================
+    let state = {
+      period: "D",
+      category: "ALL",
+      search: "",
+      preset: "CORE"
+    };
+
+    // ==========================
+    // 3) SIMULAÇÃO DE VARIAÇÕES
+    // ==========================
+    function simulateChanges(){
+      INDICATORS.forEach(ind => {
+        Object.keys(PERIODS).forEach(p => {
+          const base = (Math.random() - 0.5) * 2.0;          // -1.0% a +1.0% base
+          const scaled = base * PERIODS[p].mult;
+          ind.changes[p] = round2(scaled);
+        });
+      });
+      document.getElementById("asOf").textContent = "As of: " + nowStamp();
+    }
+
+    function round2(x){ return Math.round(x*100)/100; }
+
+    // ==========================
+    // 4) RENDER
+    // ==========================
+    function render(){
+      const period = state.period;
+      const periodLabel = PERIODS[period].label;
+
+      document.getElementById("periodLabel").textContent = "Período: " + periodLabel;
+
+      const filtered = INDICATORS
+        .filter(x => state.category === "ALL" ? true : x.category === state.category)
+        .filter(x => state.search.trim() === "" ? true : (
+          (x.name + " " + x.note).toLowerCase().includes(state.search.trim().toLowerCase())
+        ))
+        .filter(x => PRESETS[state.preset](x))
+        .map(x => ({...x, change: x.changes[period]}));
+
+      // Ordenar por magnitude de variação
+      filtered.sort((a,b) => Math.abs(b.change) - Math.abs(a.change));
+
+      document.getElementById("countLabel").textContent = `${filtered.length} indicador(es)`;
+
+      renderTable(filtered, period);
+      renderKPIs(filtered, period);
+      renderSummary(filtered, period);
+    }
+
+    function renderSummary(list, period){
+      const label = PERIODS[period].label.toLowerCase();
+      if(list.length === 0){
+        document.getElementById("summaryText").textContent =
+          "Sem indicadores com os filtros atuais. Remova filtros ou troque o preset.";
+        return;
+      }
+
+      const top = list[0];
+      const pos = list.filter(x => x.change > 0).length;
+      const neg = list.filter(x => x.change < 0).length;
+      const flat = list.length - pos - neg;
+
+      const focus = top.invertColor
+        ? "Atenção: alta em variável sensível (pode pressionar margens)."
+        : "Movimento relevante em driver potencialmente favorável.";
+
+      document.getElementById("summaryText").textContent =
+        `No horizonte ${label}, ${pos} sobem, ${neg} caem e ${flat} estáveis. ` +
+        `Maior movimento: ${top.name} (${fmtChange(top.change)}). ${focus}`;
+    }
+
+    function renderKPIs(list, period){
+      const el = document.getElementById("kpis");
+      el.innerHTML = "";
+
+      const avg = list.reduce((s,x)=>s+x.change,0) / Math.max(1, list.length);
+      const vol = Math.sqrt(list.reduce((s,x)=>s+Math.pow(x.change-avg,2),0)/Math.max(1,list.length));
+
+      // KPI 1: maior alta (ajustando "bom/ruim" pelo invertColor)
+      const best = [...list].sort((a,b)=>score(b)-score(a))[0];
+      // KPI 2: maior queda (pior score)
+      const worst = [...list].sort((a,b)=>score(a)-score(b))[0];
+
+      const kpis = [
+        {
+          label: "Maior sinal (ajustado)",
+          value: best ? fmt(best.value) : "—",
+          delta: best ? `${best.name} • ${fmtChange(best.change)}` : "—",
+          pill: best ? pillFor(best) : {text:"—", cls:"warn"}
+        },
+        {
+          label: "Maior risco (ajustado)",
+          value: worst ? fmt(worst.value) : "—",
+          delta: worst ? `${worst.name} • ${fmtChange(worst.change)}` : "—",
+          pill: worst ? pillFor(worst, true) : {text:"—", cls:"warn"}
+        },
+        {
+          label: "Dispersão do painel",
+          value: isFinite(vol) ? fmt(vol) + " pp" : "—",
+          delta: `Média: ${fmt(round2(avg))} pp • Horizonte: ${PERIODS[period].label}`,
+          pill: {text: vol>3 ? "VOL ALTA" : vol>1.5 ? "VOL MÉDIA" : "VOL BAIXA", cls: vol>3 ? "bad" : vol>1.5 ? "warn" : "good"}
+        },
+      ];
+
+      kpis.forEach(k => el.appendChild(kpiCard(k)));
+    }
+
+    function score(x){
+      // se invertColor=true, subida é ruim -> inverte sinal
+      return x.invertColor ? -x.change : x.change;
+    }
+
+    function pillFor(x, forWorst=false){
+      const s = score(x);
+      // para worst, queremos a menor pontuação
+      const isGood = forWorst ? (s >= 0) : (s > 0);
+      const isBad  = forWorst ? (s < 0) : (s < 0);
+
+      if(isGood) return { text: "FAVORÁVEL", cls: "good" };
+      if(isBad)  return { text: "PRESSÃO", cls: "bad" };
+      return { text: "NEUTRO", cls: "warn" };
+    }
+
+    function kpiCard({label, value, delta, pill}){
+      const d = document.createElement("div");
+      d.className = "kpi";
+      d.innerHTML = `
+        <div class="label">${label}</div>
+        <div class="value">${value}</div>
+        <div class="delta">
+          <span class="pill ${pill.cls}">${pill.text}</span>
+          <span>${escapeHtml(delta)}</span>
+        </div>
+      `;
+      return d;
+    }
+
+    function renderTable(list, period){
+      const tbody = document.getElementById("rows");
+      tbody.innerHTML = "";
+
+      list.forEach(ind => {
+        const tr = document.createElement("tr");
+        const ch = ind.change;
+        const signClass = (score(ind) > 0) ? "good" : (score(ind) < 0) ? "bad" : "warn";
+
+        tr.innerHTML = `
+          <td>
+            <div style="font-weight:850; letter-spacing:.01em;">${escapeHtml(ind.name)}</div>
+            <div class="muted small">Horizonte: ${PERIODS[period].label}</div>
+          </td>
+          <td class="muted">${catLabel(ind.category)}</td>
+          <td class="right" style="font-weight:850;">${fmt(ind.value)}</td>
+          <td class="right">
+            <span class="pill ${signClass}">${fmtChange(ch)}</span>
+          </td>
+          <td class="right">
+            <canvas class="spark" width="120" height="28" data-id="${ind.id}"></canvas>
+          </td>
+          <td class="muted">${escapeHtml(ind.note)}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      // desenhar sparklines
+      requestAnimationFrame(() => {
+        document.querySelectorAll("canvas.spark").forEach(c => {
+          const id = c.getAttribute("data-id");
+          const ind = INDICATORS.find(x => x.id === id);
+          if(ind) drawSpark(c, ind.series);
+        });
+      });
+    }
+
+    function drawSpark(canvas, series){
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width, h = canvas.height;
+
+      // limpar
+      ctx.clearRect(0,0,w,h);
+
+      // grid leve
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      ctx.moveTo(0, h-1);
+      ctx.lineTo(w, h-1);
+      ctx.strokeStyle = "rgba(255,255,255,.20)";
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      const min = Math.min(...series);
+      const max = Math.max(...series);
+      const pad = 2;
+
+      ctx.beginPath();
+      series.forEach((v,i)=>{
+        const x = pad + (i/(series.length-1))*(w-2*pad);
+        const y = pad + (1 - ((v-min)/Math.max(1e-9,(max-min))))*(h-2*pad);
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+
+      // linha dourada/amarela para manter paleta
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(212,175,55,.90)";
+      ctx.stroke();
+    }
+
+    function fmtChange(ch){
+      const s = ch > 0 ? "+" : "";
+      return `${s}${fmt(ch)}%`;
+    }
+
+    function catLabel(cat){
+      switch(cat){
+        case "FUEL": return "Combustíveis";
+        case "MACRO": return "Macro";
+        case "FX": return "Câmbio";
+        case "COMMOD": return "Commodities";
+        case "LOG": return "Logística/Distribuição";
+        default: return cat;
+      }
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // ==========================
+    // 5) EVENTOS UI
+    // ==========================
+    document.querySelectorAll(".segmented button").forEach(btn=>{
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".segmented button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        state.period = btn.getAttribute("data-period");
+        render();
+      });
+    });
+
+    document.getElementById("category").addEventListener("change", (e)=>{
+      state.category = e.target.value;
+      render();
+    });
+
+    document.getElementById("search").addEventListener("input", (e)=>{
+      state.search = e.target.value;
+      render();
+    });
+
+    document.getElementById("randomize").addEventListener("click", ()=>{
+      simulateChanges();
+      render();
+    });
+
+    document.querySelectorAll("#quickFilters .chip").forEach(chip=>{
+      chip.addEventListener("click", ()=>{
+        document.querySelectorAll("#quickFilters .chip").forEach(c=>c.classList.remove("active"));
+        chip.classList.add("active");
+        state.preset = chip.getAttribute("data-preset");
+        render();
+      });
+    });
+
+    // ==========================
+    // 6) INIT
+    // ==========================
+    simulateChanges();
+    render();
+  </script>
+</body>
+</html>
