@@ -1,6 +1,0 @@
-date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
-17:23:16	1325/1325	---MCZ	404	error ('Not%20Found')	text/html	etag:1762357871-ssl-df	https://maestrobusiness.com.br/robots.txt		(from )
-17:23:16	777/777	---M--	200	added ('OK')	text/html	etag:%229746203389108db41dbac07535e3a47e-ssl%22	https://maestrobusiness.com.br/	C:/Meus%20Sites/Maestro%20Business/maestrobusiness.com.br/index.html	(from )
-17:23:17	3449/3449	---MCZ	404	error ('Not%20Found')	text/html	etag:1762357871-ssl-df	https://maestrobusiness.com.br/vite.svg	C:/Meus%20Sites/Maestro%20Business/maestrobusiness.com.br/vite.0.delayed	(from https://maestrobusiness.com.br/)
-17:23:17	19889/19889	---MCZ	200	added ('OK')	text/css	etag:%223e385afe9ee3523ddf659bdbae63a064-ssl-df%22	https://maestrobusiness.com.br/assets/index-CYCp0nj9.css	C:/Meus%20Sites/Maestro%20Business/maestrobusiness.com.br/assets/index-CYCp0nj9.css	(from https://maestrobusiness.com.br/)
-17:23:17	170953/170953	---MCZ	200	added ('OK')	application/javascript	etag:%22e93961f9de5fb0e8b8388acb7e558c5b-ssl-df%22	https://maestrobusiness.com.br/assets/index-CxYJNDYQ.js	C:/Meus%20Sites/Maestro%20Business/maestrobusiness.com.br/assets/index-CxYJNDYQ.js	(from https://maestrobusiness.com.br/)
