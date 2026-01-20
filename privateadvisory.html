@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIVATE ADVISORY GLOBAL - Onde patrimônio deixa de ser reação e passa a ser arquitetura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo img {
+            width: 180px;
+            height: auto;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 24px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            padding-top: 24px;
+            border-top: 1px solid #333;
+        }
+        
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            color: #d4d4d4;
+        }
+        
+        .highlight {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        .subheadline {
+            font-size: 19px;
+            color: #a3a3a3;
+            font-weight: 400;
+            margin-bottom: 32px;
+        }
+        
+        .warning {
+            background: #1c1c1c;
+            border-left: 3px solid #eab308;
+            padding: 20px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .list-negative {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .list-negative li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            color: #a3a3a3;
+        }
+        
+        .list-negative li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: #737373;
+        }
+        
+        .card {
+            background: #141414;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        
+        .card-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .card-desc {
+            color: #d4d4d4;
+            font-size: 15px;
+        }
+        
+        .investimento {
+            background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+            border: 1px solid #404040;
+            border-radius: 16px;
+            padding: 32px 24px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        
+        .investimento-label {
+            color: #737373;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .investimento-valor {
+            font-size: 42px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        
+        .investimento-desc {
+            color: #a3a3a3;
+            margin-bottom: 8px;
+        }
+        
+        .requisitos {
+            background: #0f1414;
+            border: 1px solid #1e3a3a;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .requisitos-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .requisitos-item {
+            padding: 8px 0;
+            color: #d4d4d4;
+            border-bottom: 1px solid #1e3a3a;
+        }
+        
+        .requisitos-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cta {
+            display: block;
+            background: #ffffff;
+            color: #0a0a0a;
+            text-align: center;
+            padding: 18px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 17px;
+            margin: 32px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255,255,255,0.1);
+        }
+        
+        .profile-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .profile-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .quote {
+            border-left: 3px solid #404040;
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: #a3a3a3;
+        }
+        
+        .footer-logo {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #333;
+        }
+        
+        .footer-logo img {
+            width: 120px;
+            height: auto;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                font-size: 16px;
+            }
+            
+            .container {
+                padding: 32px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 18px;
+            }
+            
+            .investimento-valor {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="logo">
+            <img src="/moneyroom.png" alt="MoneyRoom Logo">
+        </div>
+        
+        <h1>Onde patrimônio deixa de ser reação e passa a ser arquitetura</h1>
+        
+        <p class="subheadline">O mercado financeiro foi desenhado para distribuir produtos e reagir a movimentos de curto prazo.</p>
+        
+        <p>Isso funciona enquanto o capital é pequeno. Quando cresce, começa a falhar.</p>
+        
+        <p>Não por falta de oportunidade. Mas por ausência de arquitetura decisória.</p>
+        
+        <h2>O PROBLEMA REAL</h2>
+        
+        <p>Empresários e executivos raramente sofrem por falta de acesso ou informação.</p>
+        
+        <p>O problema surge quando:</p>
+        
+        <ul class="list-negative">
+            <li>decisões são tomadas de forma isolada</li>
+            <li>o risco só aparece depois</li>
+            <li>a diversificação existe, mas não protege</li>
+            <li>o patrimônio cresce mais rápido que a estrutura decisória</li>
+        </ul>
+        
+        <p style="margin-top: 24px;"><span class="highlight">Capital sem arquitetura vira ruído.</span></p>
+        
+        <h2>A RUPTURA</h2>
+        
+        <p><span class="highlight">Patrimônio não se opera. Patrimônio se arquiteta.</span></p>
+        
+        <p>Isso muda o eixo da conversa:</p>
+        
+        <ul class="list-negative">
+            <li>de retorno para risco</li>
+            <li>de produto para função</li>
+            <li>de opinião para processo</li>
+        </ul>
+        
+        <p style="margin-top: 24px;">Sem essa mudança, qualquer estrutura patrimonial se fragiliza com o tempo.</p>
+        
+        <h2>O FATOR BRASIL</h2>
+        
+        <p>Patrimônios concentrados no Brasil carregam riscos estruturais:</p>
+        
+        <ul class="list-negative">
+            <li>moeda fraca no longo prazo</li>
+            <li>inflação recorrente</li>
+            <li>ciclos políticos com impacto direto em juros e câmbio</li>
+        </ul>
+        
+        <p style="margin-top: 24px;">Esses fatores não são previsões. São características do ambiente.</p>
+        
+        <p><span class="highlight">Ignorá-los não elimina o risco. Apenas o torna invisível.</span></p>
+        
+        <h2>PROTEÇÃO ANTES DE RETORNO</h2>
+        
+        <p>No Private Advisory Global, a discussão não começa em ganho.</p>
+        
+        <p>Começa em:</p>
+        
+        <ul class="list-negative">
+            <li>preservação de poder de compra</li>
+            <li>redução de dependência de um único regime</li>
+            <li>proteção patrimonial de longo prazo</li>
+        </ul>
+        
+        <p style="margin-top: 24px;">Ativos como ouro, prata e cobre são analisados como instrumentos de proteção e balanceamento — não como apostas.</p>
+        
+        <p><span class="highlight">Lucro não é perseguido. Torna-se consequência de uma arquitetura bem desenhada.</span></p>
+        
+        <h2>SISTEMATIZAÇÃO E GOVERNANÇA</h2>
+        
+        <p>O patrimônio passa a ser tratado como um sistema.</p>
+        
+        <p>Isso envolve:</p>
+        
+        <ul class="list-negative">
+            <li>separação funcional do capital</li>
+            <li>regras explícitas de risco</li>
+            <li>leitura macro como variável central</li>
+            <li>modelos quantitativos sem viés emocional</li>
+        </ul>
+        
+        <p style="margin-top: 24px;"><span class="highlight">Decidir menos. Decidir melhor.</span></p>
+        
+        <h2>O QUE É O PRIVATE ADVISORY GLOBAL</h2>
+        
+        <p>Um advisory patrimonial privado para capital próprio relevante.</p>
+        
+        <p>Focado em:</p>
+        
+        <ul class="list-negative">
+            <li>arquitetura patrimonial</li>
+            <li>governança de risco</li>
+            <li>disciplina decisória</li>
+        </ul>
+        
+        <p style="margin-top: 24px;"><span class="highlight">Não é gestão. Não é produto. Não é promessa.</span></p>
+        
+        <h2>PARA QUEM FAZ SENTIDO</h2>
+        
+        <div class="profile-box">
+            <div class="profile-title">Para quem:</div>
+            <p style="margin-bottom: 8px;">já construiu patrimônio</p>
+            <p style="margin-bottom: 8px;">ocupa posições de decisão</p>
+            <p style="margin-bottom: 8px;">entende que risco mal gerido destrói décadas</p>
+            <p style="margin-bottom: 0;">prefere estrutura a narrativa</p>
+        </div>
+        
+        <h2>CONSIDERAÇÃO FINAL</h2>
+        
+        <p>O Private Advisory Global existe para garantir que o patrimônio não seja desorganizado pelo mercado.</p>
+        
+        <p><span class="highlight">Se essa lógica conversa com a forma como você enxerga capital e risco, o próximo passo é simples.</span></p>
+        
+        <p>Uma conversa objetiva com o time serve apenas para verificar aderência mútua.</p>
+        
+        <a href="https://wa.me/5511983711418?text=PRIVATE_ADVISORY_GLOBAL" class="cta">AGENDAR CONVERSA →</a>
+        
+        <div class="footer-logo">
+            <img src="/moneyroom.png" alt="MoneyRoom">
+        </div>
+        
+    </div>
+    
+    <script>
+        (function() {
+            var SPEED = 12;
+            var PAUSE = 250;
+            
+            var container = document.querySelector('.container');
+            var walker = document.createTreeWalker(
+                container,
+                NodeFilter.SHOW_ELEMENT,
+                null,
+                false
+            );
+            
+            var elementsToType = [];
+            var tagsToAnimate = ['H1','H2','H3','P','SPAN','LI','DIV'];
+            var classesToSkip = ['container','warning','card','investimento','requisitos','profile-box','quote','logo'];
+            
+            var node;
+            while (node = walker.nextNode()) {
+                var dominated = tagsToAnimate.indexOf(node.tagName) > -1;
+                var isLeaf = node.children.length === 0 || 
+                             node.classList.contains('highlight') ||
+                             node.classList.contains('card-title') ||
+                             node.classList.contains('card-desc') ||
+                             node.classList.contains('investimento-label') ||
+                             node.classList.contains('investimento-valor') ||
+                             node.classList.contains('investimento-desc') ||
+                             node.classList.contains('requisitos-title') ||
+                             node.classList.contains('requisitos-item') ||
+                             node.classList.contains('profile-title') ||
+                             node.classList.contains('subheadline') ||
+                             node.classList.contains('logo');
+                
+                var shouldSkip = false;
+                for (var i = 0; i < classesToSkip.length; i++) {
+                    if (node.classList.contains(classesToSkip[i])) {
+                        shouldSkip = true;
+                        break;
+                    }
+                }
+                
+                if ((dominated || isLeaf) && !shouldSkip && node.textContent.trim().length > 0) {
+                    var alreadyCovered = false;
+                    for (var j = 0; j < elementsToType.length; j++) {
+                        if (elementsToType[j].contains(node) && elementsToType[j] !== node) {
+                            alreadyCovered = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!alreadyCovered && (isLeaf || node.tagName === 'H1' || node.tagName === 'H2' || node.tagName === 'H3' || node.tagName === 'P' || node.tagName === 'LI')) {
+                        elementsToType.push(node);
+                    }
+                }
+            }
+            
+            var finalElements = [];
+            for (var i = 0; i < elementsToType.length; i++) {
+                var el = elementsToType[i];
+                var isContained = false;
+                for (var j = 0; j < finalElements.length; j++) {
+                    if (finalElements[j].contains(el) && finalElements[j] !== el) {
+                        isContained = true;
+                        break;
+                    }
+                    if (el.contains(finalElements[j]) && el !== finalElements[j]) {
+                        finalElements.splice(j, 1);
+                        j--;
+                    }
+                }
+                if (!isContained) {
+                    finalElements.push(el);
+                }
+            }
+            
+            for (var i = 0; i < finalElements.length; i++) {
+                var el = finalElements[i];
+                el.setAttribute('data-original', el.innerHTML);
+                el.innerHTML = '';
+                el.style.opacity = '0';
+            }
+            
+            var currentIdx = 0;
+            var locked = false;
+            
+            function typeOneElement(el, done) {
+                var html = el.getAttribute('data-original');
+                var pos = 0;
+                el.style.opacity = '1';
+                el.innerHTML = '';
+                
+                function tick() {
+                    if (pos < html.length) {
+                        if (html.charAt(pos) === '<') {
+                            var end = html.indexOf('>', pos);
+                            if (end !== -1) {
+                                pos = end + 1;
+                            } else {
+                                pos++;
+                            }
+                        } else {
+                            pos++;
+                        }
+                        el.innerHTML = html.substring(0, pos);
+                        setTimeout(tick, SPEED);
+                    } else {
+                        el.innerHTML = html;
+                        setTimeout(done, PAUSE);
+                    }
+                }
+                
+                tick();
+            }
+            
+            function tryTypeNext() {
+                if (locked) return;
+                if (currentIdx >= finalElements.length) return;
+                
+                var el = finalElements[currentIdx];
+                var rect = el.getBoundingClientRect();
+                var visible = rect.top < window.innerHeight - 20;
+                
+                if (visible && el.style.opacity === '0') {
+                    locked = true;
+                    typeOneElement(el, function() {
+                        locked = false;
+                        currentIdx++;
+                        tryTypeNext();
+                    });
+                }
+            }
+            
+            setTimeout(tryTypeNext, 500);
+            
+            var scrollLock = false;
+            window.addEventListener('scroll', function() {
+                if (scrollLock) return;
+                scrollLock = true;
+                setTimeout(function() {
+                    scrollLock = false;
+                    tryTypeNext();
+                }, 100);
+            });
+            
+        })();
+    </script>
+</body>
+</html>
