@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maestro Capital — Arquitetura Patrimonial Internacional</title>
+
+  <style>
+
+  /* ==========================================================================
+     MAESTRO CAPITAL — PREMIUM BLACK / GOLD UI
+     Objetivo: visual institucional, luxo silencioso, alto contraste, sem mudar o texto.
+     ========================================================================== */
+
+  /* Fonts: títulos clássicos; texto em sans moderno.
+     Se o Google Fonts não carregar, os fallbacks garantem consistência. */
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    /* Base: preto com variações (evita "chapado") */
+    --bg-primary: #070707;
+    --bg-secondary: #0b0b0b;
+    --bg-elevated: #0f0f0f;
+    --bg-glass: rgba(7,7,7,.72);
+
+    /* Texto (alto contraste, sem “branco puro”) */
+    --text-primary: #f2f2f2;
+    --text-secondary: #b9b9b9;
+    --text-tertiary: #8a8a8a;
+
+    /* Gold: quente, sofisticado (evita amarelo saturado) */
+    --accent-primary: #c8a24a;
+    --accent-strong: #e0c36a;
+    --accent-subtle: rgba(200,162,74,.32);
+    --accent-ghost: rgba(200,162,74,.08);
+
+    /* Bordas e divisórias (metálicas sutis) */
+    --border-primary: rgba(255,255,255,.10);
+    --border-secondary: rgba(255,255,255,.06);
+
+    /* Tipografia */
+    --font-serif: 'Cormorant Garamond', 'Garamond', 'Baskerville', 'Palatino Linotype', 'Times New Roman', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+
+    /* Espaçamento */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --space-2xl: 64px;
+    --space-3xl: 96px;
+
+    /* Layout constraints */
+    --content-max: 720px;
+    --page-max: 1220px;
+
+    /* Radius / shadows */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+
+    /* Shadow: bem contida, com “lift” premium */
+    --shadow-soft: 0 10px 30px rgba(0,0,0,.55);
+    --shadow-tight: 0 8px 18px rgba(0,0,0,.45);
+  }
+
+  /* ========================================================================
+     RESET E BASE
+     ======================================================================== */
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior:smooth;
+  }
+  body{
+    margin:0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.68;
+    color: var(--text-primary);
+    background: radial-gradient(1200px 700px at 12% -10%, rgba(200,162,74,.14), transparent 60%),
+                radial-gradient(900px 600px at 92% 10%, rgba(200,162,74,.10), transparent 62%),
+                linear-gradient(180deg, var(--bg-primary), #050505 60%, #050505);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtle film grain (não pesa performance, mas dá “materialidade”) */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events:none;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.045) 0 1px, transparent 2px),
+      radial-gradient(circle at 70% 30%, rgba(255,255,255,.03) 0 1px, transparent 2px),
+      radial-gradient(circle at 40% 80%, rgba(255,255,255,.025) 0 1px, transparent 2px);
+    opacity:.22;
+    mix-blend-mode: overlay;
+  }
+
+  a{ color: inherit; }
+  ::selection{ background: rgba(200,162,74,.25); }
+
+  /* ========================================================================
+     TIPOGRAFIA
+     ======================================================================== */
+  h1, h2{ font-family: var(--font-serif); font-weight: 600; }
+  h1{
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-md);
+  }
+  h2{
+    font-size: clamp(24px, 3.2vw, 34px);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-md);
+  }
+  h3{
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--text-tertiary);
+    margin: 0 0 var(--space-sm);
+  }
+  h4{
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+  }
+  p{
+    margin: 0 0 var(--space-md);
+    max-width: 72ch;
+    color: var(--text-secondary);
+  }
+  b, strong{ font-weight: 600; color: var(--text-primary); }
+  .lead{
+    font-size: clamp(17px, 2vw, 20px);
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+  .muted{ color: var(--text-tertiary); }
+
+  .kicker{
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--accent-primary);
+    display:inline-flex;
+    gap: 10px;
+    align-items:center;
+    margin-bottom: var(--space-sm);
+  }
+  .kicker::before{
+    content:"";
+    width: 22px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-strong), transparent);
+    opacity: .9;
+  }
+
+  ul, ol{ margin: 0 0 var(--space-md); padding-left: var(--space-lg); }
+  li{ margin-bottom: var(--space-sm); line-height: 1.75; color: var(--text-secondary); }
+  li:last-child{ margin-bottom:0; }
+
+  /* ========================================================================
+     HEADER (glass, black/gold)
+     ======================================================================== */
+  .header{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-glass);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+  .header::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,162,74,.55), transparent);
+    opacity:.6;
+  }
+  .header-inner{
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: var(--space-md) var(--space-lg);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: var(--space-lg);
+  }
+  @media (max-width: 768px){
+    .header-inner{ padding: var(--space-md); }
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+  }
+  .brand-logo{
+    height: 40px;
+    width:auto;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,.55));
+  }
+  @media (max-width: 768px){ .brand-logo{ height: 32px; } }
+
+  .nav{
+    display:none;
+    gap: var(--space-xl);
+    align-items:center;
+  }
+  @media (min-width: 1024px){ .nav{ display:flex; } }
+
+  .nav a{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration:none;
+    transition: color .2s ease, opacity .2s ease;
+    position:relative;
+  }
+  .nav a:hover{ color: var(--text-primary); }
+  .nav a::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    transform: scaleX(0);
+    transition: transform .22s ease;
+    transform-origin: center;
+  }
+  .nav a:hover::after{ transform: scaleX(1); }
+
+  .nav .btn-subtle{
+    padding: 10px 16px;
+    border: 1px solid var(--border-primary);
+    border-radius: 999px;
+    background: rgba(255,255,255,.03);
+    color: var(--text-primary);
+    font-weight: 600;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .nav .btn-subtle:hover{
+    border-color: rgba(200,162,74,.55);
+    background: rgba(200,162,74,.08);
+    transform: translateY(-1px);
+  }
+  .nav .btn-subtle::after{ display:none; }
+
+  /* Focus states (acessibilidade) */
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid rgba(200,162,74,.55);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+
+  /* ========================================================================
+     LAYOUT
+     ======================================================================== */
+  .container{
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  @media (max-width: 768px){ .container{ padding: 0 var(--space-md); } }
+
+  .section{ padding: var(--space-3xl) 0; }
+  .section:first-of-type{ padding-top: var(--space-2xl); }
+  @media (max-width: 768px){
+    .section{ padding: var(--space-2xl) 0; }
+    .section:first-of-type{ padding-top: var(--space-xl); }
+  }
+
+  .content{
+    max-width: var(--content-max);
+    margin: 0 auto;
+  }
+
+  /* ========================================================================
+     HERO
+     ======================================================================== */
+  .hero{ padding: var(--space-2xl) 0 var(--space-3xl); }
+  @media (max-width: 768px){ .hero{ padding: var(--space-xl) 0 var(--space-2xl); } }
+  .hero-content{ max-width: var(--content-max); margin: 0 auto; }
+  .hero h1{ margin-bottom: var(--space-lg); }
+
+  .divider{
+    width: 64px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,162,74,.95), rgba(200,162,74,.15));
+    margin: var(--space-xl) 0 var(--space-lg);
+  }
+
+  .pill-group{ display:flex; flex-wrap:wrap; gap: var(--space-sm); margin-top: var(--space-lg); }
+  .pill{
+    padding: 7px 12px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(200,162,74,.22);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(242,242,242,.92);
+  }
+
+  .quote{
+    margin: var(--space-xl) 0;
+    padding: var(--space-lg);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    border: 1px solid rgba(200,162,74,.22);
+    border-left: 3px solid rgba(200,162,74,.72);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-tight);
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+  @media (max-width: 768px){
+    .quote{ padding: var(--space-md); font-size: 16.5px; }
+  }
+  .quote-author{
+    display:block;
+    margin-top: var(--space-md);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--text-tertiary);
+  }
+
+  /* ========================================================================
+     CARDS / BOXES
+     ======================================================================== */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-soft);
+  }
+  @media (max-width: 768px){ .card{ padding: var(--space-lg); } }
+
+  .grid{
+    display:grid;
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+  }
+  @media (min-width: 768px){ .grid-2{ grid-template-columns: repeat(2, 1fr); } }
+
+  .box{
+    padding: var(--space-lg);
+    background: rgba(255,255,255,.02);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-md);
+    box-shadow: 0 14px 40px rgba(0,0,0,.35);
+  }
+  @media (max-width: 768px){ .box{ padding: var(--space-md); } }
+  .box h3{ margin-bottom: var(--space-md); }
+
+  .callout{
+    margin: var(--space-xl) 0;
+    padding: var(--space-lg);
+    background: radial-gradient(900px 220px at 10% 0%, rgba(200,162,74,.14), transparent 55%),
+                rgba(255,255,255,.02);
+    border: 1px solid rgba(200,162,74,.22);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    color: rgba(242,242,242,.92);
+  }
+  @media (max-width: 768px){ .callout{ padding: var(--space-md); } }
+
+  /* ========================================================================
+     STEPS
+     ======================================================================== */
+  .steps{ margin: var(--space-xl) 0; }
+  .step{
+    display:flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+  .step:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  @media (max-width: 768px){
+    .step{ gap: var(--space-md); margin-bottom: var(--space-lg); padding-bottom: var(--space-lg); }
+  }
+
+  .step-number{
+    flex-shrink:0;
+    width: 34px;
+    height: 34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(200,162,74,.10);
+    border: 1px solid rgba(200,162,74,.28);
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-strong);
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+  }
+  .step-content p{ color: var(--text-secondary); }
+
+  /* ========================================================================
+     PARTNERS
+     ======================================================================== */
+  .partners{ margin: var(--space-xl) 0; }
+  .partners-grid{
+    display:grid;
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+  @media (min-width: 640px){ .partners-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (min-width: 1024px){ .partners-grid{ grid-template-columns: repeat(3,1fr); } }
+
+  .partner-card{
+    padding: var(--space-lg);
+    background: rgba(255,255,255,.02);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-md);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    display:flex;
+    flex-direction:column;
+    gap: var(--space-md);
+  }
+  .partner-label{
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--text-tertiary);
+  }
+  .partner-check{
+    width: 22px; height: 22px;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(200,162,74,.10);
+    border: 1px solid rgba(200,162,74,.25);
+    border-radius: 50%;
+    font-size: 12px;
+    color: var(--accent-strong);
+  }
+  .partner-logo{
+    height: 82px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,.25);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+  }
+  .partner-logo img{
+    max-width: 100%;
+    max-height: 48px;
+    opacity: .78;
+    filter: brightness(.98) contrast(1.05);
+  }
+  .partner-description{
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* Nota administrativa: mantém, mas ajusta para dark */
+  .admin-note{
+    padding: var(--space-md);
+    background: rgba(200,162,74,.10);
+    border: 1px solid rgba(200,162,74,.28);
+    border-radius: 12px;
+    font-size: 13px;
+    color: rgba(242,242,242,.92);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ========================================================================
+     CTA
+     ======================================================================== */
+  .cta-section{ padding: var(--space-2xl) 0; }
+  .cta-card{
+    max-width: 660px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    border: 1px solid rgba(200,162,74,.22);
+    border-radius: var(--radius-lg);
+    text-align:center;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    background: radial-gradient(800px 300px at 50% 0%, rgba(200,162,74,.18), transparent 60%);
+    opacity:.9;
+    pointer-events:none;
+  }
+  .cta-card > *{ position: relative; }
+  @media (max-width: 768px){ .cta-card{ padding: var(--space-lg); } }
+
+  .cta-card h3{
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+    text-transform:none;
+  }
+  .cta-card p{ max-width: 100%; margin: 0 0 var(--space-lg); color: var(--text-secondary); }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding: 14px 28px;
+    background: linear-gradient(180deg, rgba(200,162,74,.18), rgba(200,162,74,.10));
+    border: 1px solid rgba(200,162,74,.45);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--text-primary);
+    text-decoration:none;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+    cursor:pointer;
+    box-shadow: 0 18px 44px rgba(0,0,0,.40);
+  }
+  .btn:hover{
+    transform: translateY(-1px);
+    border-color: rgba(224,195,106,.80);
+    background: linear-gradient(180deg, rgba(224,195,106,.22), rgba(200,162,74,.12));
+  }
+  .btn:active{ transform: translateY(0); }
+
+  @media (max-width: 768px){ .btn{ width: 100%; } }
+
+  /* ========================================================================
+     IMAGENS / PLACEHOLDERS
+     ======================================================================== */
+  .section-image{
+    width:100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-xl);
+    border: 1px solid var(--border-secondary);
+    box-shadow: var(--shadow-soft);
+  }
+  @media (max-width: 768px){
+    .section-image{ height: 220px; margin-bottom: var(--space-lg); }
+  }
+
+  .section-image-placeholder{
+    width:100%;
+    height: 320px;
+    background: radial-gradient(900px 360px at 20% 10%, rgba(200,162,74,.16), transparent 55%),
+                linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-xl);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    border: 1px solid var(--border-secondary);
+  }
+  @media (max-width: 768px){
+    .section-image-placeholder{ height: 220px; margin-bottom: var(--space-lg); }
+  }
+
+  /* ========================================================================
+     FOOTER
+     ======================================================================== */
+  .footer{
+    padding: var(--space-2xl) 0 var(--space-xl);
+    border-top: 1px solid var(--border-secondary);
+    text-align:center;
+  }
+  .footer-logo{
+    height: 60px;
+    width:auto;
+    margin: 0 auto var(--space-md);
+    display:block;
+    opacity: .95;
+    filter: drop-shadow(0 10px 26px rgba(0,0,0,.55));
+  }
+  @media (max-width: 768px){ .footer-logo{ height: 48px; } }
+  .footer-title{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+  .footer-legal{
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+
+  /* ========================================================================
+     UTILITIES
+     ======================================================================== */
+  .text-center{ text-align:center; }
+  .mt-xl{ margin-top: var(--space-xl); }
+  .mb-xl{ margin-bottom: var(--space-xl); }
+
+
+  /* ========================================================================
+     PARTNER CARD INTERACTION + MODAL (POPUP IMAGEM)
+     ======================================================================== */
+  .partner-card{
+    position: relative;
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  .partner-card:hover{
+    border-color: rgba(200,162,74,.32);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35), 0 0 0 1px rgba(200,162,74,.45);
+    transform: translateY(-1px);
+  }
+  .partner-card:active{ transform: translateY(0); }
+
+  .partner-hint{
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(200,162,74,.78);
+    pointer-events: none;
+  }
+
+  .partner-modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.76);
+    backdrop-filter: blur(5px) saturate(120%);
+    -webkit-backdrop-filter: blur(5px) saturate(120%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
+    z-index: 9999;
+    padding: 18px;
+  }
+  .partner-modal.is-open{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .partner-modal__dialog{
+    position: relative;
+    max-width: 92vw;
+    max-height: 92vh;
+  }
+  .partner-modal__img{
+    display:block;
+    max-width: 92vw;
+    max-height: 92vh;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 30px 90px rgba(0,0,0,.65);
+  }
+  .partner-modal__close{
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,162,74,.55);
+    background: rgba(11,11,11,.92);
+    color: var(--accent-strong);
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 14px 40px rgba(0,0,0,.55);
+  }
+  .partner-modal__close:hover{
+    border-color: rgba(224,195,106,.85);
+    background: rgba(15,15,15,.95);
+  }
+
+</style>
+</head>
+
+<body>
+  <!-- ========================================================================
+       HEADER FIXO
+       ======================================================================== -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="brand">
+        <img src="assets/maestro-logo.png" alt="Maestro Capital" class="brand-logo" />
+      </a>
+      <nav class="nav">
+        <a href="#manifesto">Manifesto</a>
+        <a href="#processo">Processo</a>
+        <a href="#diagnostico">Diagnóstico</a>
+        <a href="#cta" class="btn-subtle">Iniciar conversa</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CONTEÚDO PRINCIPAL
+       ======================================================================== -->
+  <main class="container">
+    
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="kicker">Arquitetura Patrimonial Internacional</span>
+        <h1>Patrimônio não se protege sozinho. Você precisa de arquitetura antes de investir.</h1>
+        <p class="lead">
+          A maioria trata patrimônio como se fosse apenas investimento. Mas investimento sem estrutura é risco sem resposta. Este documento explica como arquitetura patrimonial internacional funciona quando você quer controle, previsibilidade e continuidade.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="pill-group">
+          <span class="pill">Redução do Fator Brasil</span>
+          <span class="pill">Internacionalização real</span>
+          <span class="pill">Governança de continuidade</span>
+          <span class="pill">Estrutura antes de produto</span>
+        </div>
+
+        <div class="quote">
+          "Patrimônio sem arquitetura é vulnerável. Internacionalização sem governança é ilusão."
+          <span class="quote-author">— Maestro Capital</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="section" id="manifesto">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: arquitetura/estrutura corporativa<br>
+          (Substitua por: assets/images/arquitetura-patrimonial.jpg)
+        </div>
+        
+        <h2>1) O que é arquitetura patrimonial (e por que importa)</h2>
+        <p class="lead">
+          Não adianta investir bem se você não tem controle sobre o que acontece quando as regras mudam ou um evento crítico acontece.
+        </p>
+        
+        <p>
+          Arquitetura patrimonial é: <strong>estrutura + governança + regras claras de acesso e continuidade</strong>. Ela reduz dependências, aumenta soberania e garante que o patrimônio continua funcional quando você precisa.
+        </p>
+
+        <p>
+          Não é "offshore" vazio. Não é produto de investimento. É a diferença entre ter patrimônio e ter controle sobre ele.
+        </p>
+
+        <div class="callout">
+          Se o seu patrimônio depende de uma corretora funcionar, de uma regra não mudar, ou de alguém concordar em liberar — você tem investimento, não arquitetura.
+        </div>
+      </div>
+    </section>
+
+    <!-- FATOR BRASIL -->
+    <section class="section">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: mapa/globo/internacional<br>
+          (Substitua por: assets/images/fator-brasil.jpg)
+        </div>
+        
+        <h2>2) O "Fator Brasil" não é só imposto</h2>
+        <p class="lead">
+          O problema não é pagar imposto. O problema é ter o patrimônio exposto a mudanças de regras, dependências operacionais e bloqueios estruturais que você não controla.
+        </p>
+
+        <div class="grid grid-2 mt-xl">
+          <div class="box">
+            <h3>O que evitamos</h3>
+            <ul>
+              <li>Regras que mudam sem aviso e afetam tudo.</li>
+              <li>"Soluções" que parecem simples, mas criam amarras em eventos.</li>
+              <li>Dependência de processos internos de bancos/corretoras.</li>
+              <li>Sucessão tratada como "depois", até virar urgência.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h3>O que buscamos</h3>
+            <ul>
+              <li>Reduzir exposição a risco de jurisdição.</li>
+              <li>Ganhar previsibilidade de acesso e execução.</li>
+              <li>Ter camada internacional funcional (não estética).</li>
+              <li>Continuidade quando o evento acontecer.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERNACIONALIZAÇÃO -->
+    <section class="section" id="internacionalizacao">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: passaporte/viagem internacional/aeroporto<br>
+          (Substitua por: assets/images/internacionalizacao.jpg)
+        </div>
+        
+        <h2>3) Internacionalização de verdade vs. "ter ativos em dólar"</h2>
+        <p class="lead">
+          Ter dólar não garante governança. Você pode mudar a moeda e manter o mesmo risco estrutural.
+        </p>
+
+        <div class="grid grid-2 mt-xl">
+          <div class="box">
+            <h3>Falso internacional</h3>
+            <ul>
+              <li>"Exterior" via <strong>corretora brasileira</strong>, com dependência operacional.</li>
+              <li>Sucessão, acesso e continuidade seguem mal definidos.</li>
+              <li>Você muda o ativo, mas não muda o sistema.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h3>Internacionalização real</h3>
+            <ul>
+              <li>Estrutura feita para <strong>controle, acesso e continuidade</strong>.</li>
+              <li>Jurisdição e regras vêm antes do investimento.</li>
+              <li>Camadas que reduzem dependência e fricção.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout">
+          Internacionalizar de verdade é ganhar soberania e previsibilidade — não apenas comprar ativos fora.
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTA EUA -->
+    <section class="section" id="alerta-eua">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: Wall Street/distrito financeiro/skyline<br>
+          (Substitua por: assets/images/eua-arquitetura.jpg)
+        </div>
+        
+        <h2>4) "Só manda para os EUA" pode piorar sem arquitetura</h2>
+        <p>
+          Trocar Brasil por EUA <strong>sem arquitetura</strong> pode trocar um problema por outro: custos, regras e burocracias diferentes do que você imaginava. Moeda forte ajuda — mas não substitui governança.
+        </p>
+
+        <div class="callout">
+          Moeda forte não é proteção. Proteção é ter regras e controle antes do investimento.
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESSO -->
+    <section class="section" id="processo">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: reunião executiva/mesa de trabalho/consultoria<br>
+          (Substitua por: assets/images/processo-trabalho.jpg)
+        </div>
+        
+        <h2>5) Como trabalhamos</h2>
+        <p class="lead">
+          Primeiro vem a sua realidade (família, empresa, fluxo, objetivos e tolerância a fricção). Depois vem produto. Estrutura vem antes.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Diagnóstico de comando</h4>
+              <p>Mapeamos onde está o patrimônio, quem controla, sob qual lei e quais fricções existem para executar.</p>
+              <ul>
+                <li>Dependências e pontos únicos de falha.</li>
+                <li>Exposição ao Fator Brasil (execução, regras, burocracia).</li>
+                <li>Riscos em eventos (acesso e continuidade).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Arquitetura sob medida</h4>
+              <p>Desenhamos a estrutura mínima necessária para aumentar controle — sem complexidade inútil.</p>
+              <ul>
+                <li>Camadas: proteção, internacionalização, continuidade.</li>
+                <li>Regras claras de acesso e governança.</li>
+                <li>Decisão do que manter, mover ou substituir.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Implementação executável</h4>
+              <p>Colocamos a arquitetura para funcionar: contas, veículos, beneficiários e rotinas.</p>
+              <ul>
+                <li>Internacionalização real (não fachada).</li>
+                <li>Planejamento/previdência em USD quando fizer sentido.</li>
+                <li>Documentação clara para operar sem improviso.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Investimentos coerentes</h4>
+              <p>Com a base pronta, investimentos viram ferramenta: alinhados a perfil, prazo e execução.</p>
+              <ul>
+                <li>Disciplina e execução acima de "promessa".</li>
+                <li>Carteira como parte da arquitetura, não substituto dela.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          Resultado esperado: mais soberania, menos fricção e um patrimônio que continua funcional quando importa.
+        </div>
+      </div>
+    </section>
+
+    <!-- PARCEIROS -->
+    <section class="section" id="parceiros">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: handshake/parceria empresarial/aperto de mão<br>
+          (Substitua por: assets/images/parceiros.jpg)
+        </div>
+        
+        <h2>Nossos parceiros</h2>
+        <p class="muted">
+          Trabalhamos com instituições que garantem padrões internacionais de governança, custódia e compliance.
+        </p>
+
+        <div class="admin-note">
+          <strong>Nota de implementação:</strong> Substitua as imagens abaixo pelos logos reais dos parceiros. Caminho sugerido: assets/partners/
+        </div>
+
+        <div class="partners-grid">
+          <div class="partner-card" data-partner="jurisdicao" tabindex="0">
+            <div class="partner-header">
+              <span class="partner-label">Jurisdição</span>
+              <span class="partner-check">✓</span>
+            </div>
+            <div class="partner-logo">
+              <img src="assets/partners/parceiro-1.png" alt="Parceiro jurisdição" />
+            </div>
+            <p class="partner-description">Base legal e regras do veículo/estrutura.</p>
+            <span class="partner-hint">clique aqui</span>
+          </div>
+
+          <div class="partner-card" data-partner="regulacao" tabindex="0">
+            <div class="partner-header">
+              <span class="partner-label">Regulação</span>
+              <span class="partner-check">✓</span>
+            </div>
+            <div class="partner-logo">
+              <img src="assets/partners/parceiro-2.png" alt="Parceiro regulação" />
+            </div>
+            <p class="partner-description">Padrões de supervisão, segregação e compliance.</p>
+            <span class="partner-hint">clique aqui</span>
+          </div>
+
+          <div class="partner-card" data-partner="custodia" tabindex="0">
+            <div class="partner-header">
+              <span class="partner-label">Custódia</span>
+              <span class="partner-check">✓</span>
+            </div>
+            <div class="partner-logo">
+              <img src="assets/partners/parceiro-3.png" alt="Parceiro custódia" />
+            </div>
+            <p class="partner-description">Infraestrutura de custódia e segregação de ativos.</p>
+            <span class="partner-hint">clique aqui</span>
+          </div>
+
+          <div class="partner-card" data-partner="gestao" tabindex="0">
+            <div class="partner-header">
+              <span class="partner-label">Gestão</span>
+              <span class="partner-check">✓</span>
+            </div>
+            <div class="partner-logo">
+              <img src="assets/partners/parceiro-4.png" alt="Parceiro gestão" />
+            </div>
+            <p class="partner-description">Gestão profissional alinhada à arquitetura.</p>
+            <span class="partner-hint">clique aqui</span>
+          </div>
+
+          <div class="partner-card" data-partner="auditoria" tabindex="0">
+            <div class="partner-header">
+              <span class="partner-label">Auditoria</span>
+              <span class="partner-check">✓</span>
+            </div>
+            <div class="partner-logo">
+              <img src="assets/partners/parceiro-5.png" alt="Parceiro auditoria" />
+            </div>
+            <p class="partner-description">Auditoria independente e padrões de reporte.</p>
+            <span class="partner-hint">clique aqui</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PÚBLICO -->
+    <section class="section" id="publico">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: pessoa pensativa/decisão estratégica/reflexão<br>
+          (Substitua por: assets/images/para-quem.jpg)
+        </div>
+        
+        <h2>6) Para quem é</h2>
+
+        <div class="grid grid-2 mt-xl">
+          <div class="box">
+            <h3>É para você se</h3>
+            <ul>
+              <li>Você quer <strong>controle real</strong> sobre o patrimônio.</li>
+              <li>Você quer reduzir exposição ao <strong>Fator Brasil</strong>.</li>
+              <li>Você quer internacionalização com <strong>governança</strong> e previsibilidade.</li>
+              <li>Você quer continuidade em eventos (incapacidade/falecimento).</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h3>Não é para você se</h3>
+            <ul>
+              <li>Você só quer "dica de investimento".</li>
+              <li>Você quer apenas produto e benchmark.</li>
+              <li>Você não quer encarar decisões de controle e estrutura.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIAGNÓSTICO -->
+    <section class="section" id="diagnostico">
+      <div class="content">
+        <!-- Imagem editorial - substitua pelo caminho correto -->
+        <div class="section-image-placeholder">
+          Imagem sugerida: análise/documentos/planejamento estratégico<br>
+          (Substitua por: assets/images/diagnostico.jpg)
+        </div>
+        
+        <h2>7) Diagnóstico Maestro (primeiro passo)</h2>
+        <p class="lead">
+          Uma conversa estruturada para você sair com clareza objetiva sobre:
+        </p>
+
+        <ul>
+          <li>onde existe exposição ao <strong>Fator Brasil</strong>;</li>
+          <li>onde há dependência de terceiros para acesso/execução;</li>
+          <li>o que seria uma arquitetura internacional funcional no seu caso;</li>
+          <li>quais caminhos fazem sentido (proteção, internacionalização, planejamento em USD, investimentos e sucessão).</li>
+        </ul>
+
+        <div class="callout">
+          Se você quer reduzir risco estrutural, comece pelo diagnóstico.
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="cta">
+      <div class="cta-card">
+        <h3>Agendar diagnóstico</h3>
+        <p>
+          Inicie a conversa pelo WhatsApp. Este documento foi desenhado para ser encaminhado sem exigir explicação adicional.
+        </p>
+        <a class="btn" href="https://wa.me/SEUNUMERO?text=Quero%20agendar%20o%20Diagn%C3%B3stico%20Maestro%20Capital." target="_blank" rel="noopener noreferrer">
+          Abrir WhatsApp
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <img src="assets/maestro-logo.png" alt="Maestro Capital" class="footer-logo" />
+      <div class="footer-title">Maestro Capital — Arquitetura Patrimonial Internacional</div>
+      <p class="footer-legal">Material informativo. Não constitui recomendação individual de investimento.</p>
+    </div>
+  </footer>
+
+
+  <!-- ========================================================================
+       PARTNER MODAL (POPUP)
+       ======================================================================== -->
+  <div class="partner-modal" id="partnerModal" aria-hidden="true">
+    <div class="partner-modal__dialog" role="dialog" aria-modal="true">
+      <button class="partner-modal__close" type="button" aria-label="Fechar">&times;</button>
+      <img class="partner-modal__img" id="partnerModalImg" alt="">
+    </div>
+  </div>
+
+  <script>
+    const partnerImages = {
+      jurisdicao: "assets/partners/jurisdicao.png",
+      regulacao: "assets/partners/jurisdicao.png",
+      custodia: "assets/partners/custodia.png",
+      gestao: "assets/partners/gestao.png",
+      auditoria: "assets/partners/auditoria.png",
+    };
+
+    const modal = document.getElementById("partnerModal");
+    const modalImg = document.getElementById("partnerModalImg");
+    const closeBtn = modal.querySelector(".partner-modal__close");
+    let lastFocused = null;
+
+    function openPartnerModal(key, triggerEl){
+      const src = partnerImages[key];
+      if (!src) return;
+
+      lastFocused = triggerEl || document.activeElement;
+
+      modalImg.src = src;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      closeBtn.focus();
+    }
+
+    function closePartnerModal(){
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      modalImg.src = "";
+
+      if (lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
+      }
+    }
+
+    document.querySelectorAll(".partner-card[data-partner]").forEach((card) => {
+      card.addEventListener("click", () => openPartnerModal(card.dataset.partner, card));
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPartnerModal(card.dataset.partner, card);
+        }
+      });
+    });
+
+    closeBtn.addEventListener("click", closePartnerModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closePartnerModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) {
+        closePartnerModal();
+      }
+    });
+  </script>
+
+</body>
+</html>
